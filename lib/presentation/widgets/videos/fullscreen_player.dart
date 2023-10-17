@@ -1,22 +1,6 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
+import 'package:toktik/presentation/widgets/videos/video_background.dart';
 import 'package:video_player/video_player.dart';
-
-// class FullScreenPlayer extends stafu {
-//   final String videoUrl;
-//   final String caption;
-
-//   const FullScreenPlayer(
-//       {super.key, required this.videoUrl, required this.caption});
-
-//   late VideoPlayerController controller;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Placeholder();
-//   }
-// }
 
 class FullScreenPlayer extends StatefulWidget {
   final String videoUrl;
@@ -61,15 +45,28 @@ class _FullScreenPlayerState extends State<FullScreenPlayer> {
           );
         }
 
-        return AspectRatio(
-          aspectRatio: controller.value.aspectRatio,
-          child: Stack(children: [
-            VideoPlayer(controller),
-            Positioned(
-                bottom: 50,
-                left: 20,
-                child: _VideoCaption(caption: widget.caption))
-          ]),
+        return GestureDetector(
+          onTap: () {
+            if (controller.value.isPlaying) {
+              controller.pause();
+              return;
+            }
+
+            controller.play();
+          },
+          child: AspectRatio(
+            aspectRatio: controller.value.aspectRatio,
+            child: Stack(children: [
+              VideoPlayer(controller),
+              VideoBackground(
+                stops: const [0.8, 1.0],
+              ),
+              Positioned(
+                  bottom: 50,
+                  left: 20,
+                  child: _VideoCaption(caption: widget.caption))
+            ]),
+          ),
         );
       },
     );
